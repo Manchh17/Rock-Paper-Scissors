@@ -1,42 +1,40 @@
-import java.util.Random;
+/*
+Author: Philip Manchester
+*/
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class RockPaperScissors {
-    private static boolean playAgain(Scanner scanner) {
-        System.out.println("Play again? Y(8), N(9)?");
-        switch (scanner.nextInt()) {
-        case 8:
-            System.out.println("Rock, Paper, Scissors!");
-            return true;
-        default:
-            System.out.println("Thanks for playing!");
-            return false;
+    public static void main(String[] args){
+        List<Integer> computerMoves = Arrays.asList(1, 2, 3); 
+        Scanner input = new Scanner(System.in);
+
+        loop : while(true){
+            System.out.print("Rock, Paper, Scissors, Exit >>> ");
+            String move = input.nextLine().toLowerCase();
+            Collections.shuffle(computerMoves); 
+
+            switch(move){
+                case "rock" : determineWinner(computerMoves.get(0), "Tie", "You Lose", "You Win"); break;
+                case "paper" : determineWinner(computerMoves.get(0), "You Win", "Tie", "You Lose"); break; 
+                case "scissors" : determineWinner(computerMoves.get(0), "You Lose", "You Win", "Tie"); break; 
+                case "exit" : break loop; 
+                case "" : continue loop; 
+                default : System.out.println("Invalid Input");
+            }
         }
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        RPSPlayer computer = new RandomComputerPlayer(new Random());
-        RPSPlayer human = new HumanPlayer(scanner);
-
-        System.out.println("Rock Paper Scissors, by 200_success!");
-        do {
-            String comp = computer.play();
-            String you = human.play();
-
-            System.out.printf("%s vs. %s", comp, you);
-            if (you.equals(comp)) {
-                System.out.println(", IT'S A TIE!");
-            } else if ( ("Rock".equals(you) && "Scissors".equals(comp)) ||
-                        ("Scissors".equals(you) && "Paper".equals(comp)) ||
-                        ("Paper".equals(you) && "Rock".equals(comp)) ) {
-                System.out.println("! You win!");
-            } else {
-                assert (("Rock".equals(comp) && "Scissors".equals(you)) ||
-                        ("Scissors".equals(comp) && "Paper".equals(you)) ||
-                        ("Paper".equals(comp) && "Rock".equals(you)));
-                System.out.println("! You lose!");
-            }
-        } while (playAgain(scanner));
+    private static void determineWinner(int computerMove, String m1, String m2, String m3){
+        if(computerMove == 1){ // computer move is rock
+            System.out.printf("Computer Chose Rock, %s%n", m1);
+        } else if(computerMove == 2){ // computer move is paper
+            System.out.printf("Computer Chose Paper, %s%n", m2);
+        } else { // computer move is scissors
+            System.out.printf("Computer Chose Scissors, %s%n", m3);
+        }
     }
 }
